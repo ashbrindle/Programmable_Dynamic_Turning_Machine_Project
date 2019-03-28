@@ -6,7 +6,7 @@ class MainMenu():
         # pre-defined fonts for the GUI
         self.title_font = ("times", 15)
         self.dropdown_font = ("times", 10)
-        self.submit_font = ("calibri", 10, "bold")
+        self.submit_font = ("calibri", 10, "bold") 
 
         # default selection for the drop down menu
         self.machine_selection = "Hello World Turing Machine"
