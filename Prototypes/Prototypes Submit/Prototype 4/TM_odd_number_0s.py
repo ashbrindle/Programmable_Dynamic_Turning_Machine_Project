@@ -338,7 +338,8 @@ class TuringMachineGUI():
             height = 1,
             width = 36,
             borderwidth = 1,
-            relief = "solid")
+            relief = "solid",
+            command = self.helpPopup)
         self.btnHelp.pack()
         self.btnHelp.place(x = 468, y = 375)
 
@@ -588,6 +589,32 @@ class TuringMachineGUI():
         btnDismiss.focus()
 
         self.resetMachine()
+
+    def helpPopup(self):
+        # string for the help window, explaining how to use the machine
+        help_string = """A turing machine works through actions depending on the instructions in the machine
+        for example; if the machine were to be in state A and read a 1 on the tape, it will then proceed to change it to 0, change state to B and move Right
+        this will then trigger another instruction to execute if one is present.
+
+        To select a tape, use the drop down menu above for some examples to use, and hit the run button to watch the machine operate
+        Each of the instructions are shown on the left of the window and will show in a section (above the run button) the process the machine is taking
+        A state diagram is also provided to help the user identify what is happening on that tape at any given time
+        
+        PICK A TAPE
+        WATCH THE MACHINE RUN!"""
+
+        popup_finaltape = Toplevel()
+        popup_finaltape.title("Help")
+        popup_finaltape.geometry("1000x200+750+250")
+        lblInstructionFound = Label(
+            popup_finaltape, 
+            text = help_string)
+        lblInstructionFound.pack()
+
+        btnDismiss = Button(popup_finaltape, text="Dismiss Window", command = popup_finaltape.destroy)
+        btnDismiss.pack()
+
+        btnDismiss.focus()
 
 # a transition class used to handle if any of the methods cannot be called in the current machine state
 class Transition:
@@ -953,4 +980,5 @@ if __name__ == "__main__":
     root = Tk()
     app = TuringMachineGUI(root)
     root.geometry("1375x500+250+250")
+    root.title("Odd Number of 0's")
     root.mainloop()
