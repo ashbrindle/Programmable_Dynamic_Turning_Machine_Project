@@ -1022,6 +1022,7 @@ class TuringMachineGUI():
             # reads the tape from the file, using CSV
             self.TM.tape = map(str, line.strip().split(','))
         self.fillTape()
+        self.TM.original_tape = self.TM.tape
 
         file.close        
 
