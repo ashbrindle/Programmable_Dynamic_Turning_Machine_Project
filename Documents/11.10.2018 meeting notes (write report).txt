@@ -1,0 +1,5 @@
+compare python to other languages
+compare python libraries https://blog.resellerclub.com/the-6-best-python-gui-frameworks-for-developers/
+write about the turing machine and the types of machines
+reference the annotated turing book
+why is python good for what i am doing
