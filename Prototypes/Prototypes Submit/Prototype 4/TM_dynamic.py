@@ -1170,26 +1170,41 @@ class TuringMachine(StateContext, Transition):
         
     def startMachine(self):
 
+        # depending on the tape position, the machine will scroll right that many times to appear correctly on the GUI
+
         for x in range(self.tape_position):
             app.scrollRight()
 
+        # firstly the machine will get all of the keys (states) that are used in the instructions
         states = self.temp_instructions.keys()  
+
+        # if there is not starting state, the first state in the instructions will be set as so
 
         if self.starting_state is None:
             self.starting_state = states[0]
             print "Starting State set to: " + self.starting_state
             app.lblStartingState.config(text = "Starting State: " + self.starting_state)
 
+        # and will then cycle through the states and add them to the machine with the instructions
+            # associated with each state, passed in via a method parameter
+
         for state in states:
             self.availableStates[state] = TuringState(self, self.temp_instructions[state])
+
+        # the machine will then go through all of the states that the machine should be able to transition to
+            # and if it does not exist it will create it by looking into the nested dictionaries contents.
+            # If the state does not exist it will be create with an empty set of instructions, these instructions
+            # are set to be empty as the state will not transition anywhere
 
         for state in self.temp_instructions:
             for symbol in self.temp_instructions[state]:
                 if self.temp_instructions[state][symbol][NEXT_STATE] not in self.availableStates.keys():
                     self.availableStates[self.temp_instructions[state][symbol][NEXT_STATE]] = TuringState(self, {})
 
+        # the starting state will then be set
         self.setState(self.starting_state)
 
+        # runs the machine while the machine does not reach a HALT or finds instructions
         while (True):
             if self.state == "HALT":
                 app.finalTapePopup()
