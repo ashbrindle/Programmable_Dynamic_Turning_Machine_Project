@@ -6,6 +6,8 @@ import tkMessageBox
 
 class TuringMachineGUI():
     def __init__(self, window):
+
+        # fonts for the GUI
         self.tape_font = ("times", 20)
         self.position_font = ("times", 15, "italic")
         self.instruction_font = ("times", 15)
@@ -19,10 +21,13 @@ class TuringMachineGUI():
         self.title_font = ("times", 15)
         self.title2_font = ("times", 11)
 
+        # these attributes are used before starting the machine and are passed in when starting
+        # includes the tape full of blank symbols, tape position which can be changed, as well as the starting state
         self.tape = ["#", "#", "#", "#", "#", "#", "#", "#", "#", "#"]
         self.tape_position = 0
         self.starting_state = "A"
 
+        # list used to display the instructions on the GUI listbox
         self.list_instructions = [
             "State   Symbol   Dir   New Symbol   New State", 
             "A        0             R      1                     B", 
@@ -38,34 +43,40 @@ class TuringMachineGUI():
             "-----------------------------------------------------"
             ]
 
+        # a list for the tape dropdown
         self.tape_options = [
             "Empty Tape",
             "[0, 0, 0] (Odd number of 0's (3))",
             "[0, 0, 0, 0] (Even Number of 0's (4) [Will cause an infinite loop])"
         ]
 
+        # dictionary holding all of the tapes associated with each option
         self.tapes = {
             "Empty Tape": ["#", "#", "#", "#", "#", "#", "#", "#", "#", "#"],
             "[0, 0, 0] (Odd number of 0's (3))": ["0", "0", "0"],
             "[0, 0, 0, 0] (Even Number of 0's (4) [Will cause an infinite loop])": ["0", "0", "0", "0"]
         }
 
+        # a dictionary handling each starting state asociated with each option
         self.starting_states = {
             "Empty Tape": "A",
             "[0, 0, 0] (Odd number of 0's (3))": "A",
             "[0, 0, 0, 0] (Even Number of 0's (4) [Will cause an infinite loop])": "A"
         }
 
+        # a dictionary to handle the starting positions of each option
         self.tape_positions = {
             "Empty Tape": 0,
             "[0, 0, 0] (Odd number of 0's (3))": 0,
             "[0, 0, 0, 0] (Even Number of 0's (4) [Will cause an infinite loop])": 0
         }
 
-        self.str_instructions = []
+        # handles the positions each tape value will appear on the tape
         self.GUI_tape_positions = [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
+        # method to draw out the GUI on the window
         self.drawWindow()
 
+    # handles drawing the window
     def drawWindow(self):
 
         self.lblPositions = Label(
@@ -365,21 +376,26 @@ class TuringMachineGUI():
         self.imgStates.create_image(0,0, image = self.photoState, anchor="nw")
         self.imgStates.place(x = 750, y = 80)
 
+    # when selecting an item from the tape drop down menu, this method is called
     def selections(self, item):
+        # depending on tape selected, the tape, state and tape position will change before starting the machine
         self.tape = self.tapes[item][:]
         self.starting_state = self.starting_states[item]
         self.tape_position = self.tape_positions[item]
         self.fillTape()
+        # the next method handles filling the GUI tape
         if self.tape_position >= 0:
             for pos in range(self.tape_position):
                 self.scrollRight(self.tape)
+        # updates the GUI
         root.update()
 
+    # this method will move the GUI tape along to the left
+    # this is done through the use of a list defining the positions of each element of the tape for the GUI tape
     def scrollLeft(self, current_tape):
         if len(current_tape) > 0:
 
-            # for index in range(len(self.GUI_tape_positions)):
-            #     self.GUI_tape_positions[index] -= 1
+            # this will check where the tape values are positioned on the tape and any blank squares will be made blank (#)
 
             if self.GUI_tape_positions[3] == -1:
                 for index in range(len(self.GUI_tape_positions)):
@@ -419,6 +435,9 @@ class TuringMachineGUI():
                 else:
                     self.lblTape7.config(text = "#")
 
+    # this method will move the GUI tape along to the right
+    # and will use the GUI tape positions list to determine where the positioning of each tape value will be on the GUI
+    # any blank symbols will be filled with (#) to represent it
     def scrollRight(self, current_tape):
         if len(current_tape) > 0:
 
@@ -462,7 +481,9 @@ class TuringMachineGUI():
                 for index in range(len(self.GUI_tape_positions)):
                     self.GUI_tape_positions[index] -= 1
 
+    # this method will fill the GUI tape with the updated values
     def fillTape(self):
+        # initially resets the GUI tapes attributes
         self.GUI_tape_positions = [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
         self.lblTape0.config(text = "#")
         self.lblTape1.config(text = "#")
@@ -473,6 +494,7 @@ class TuringMachineGUI():
         self.lblTape6.config(text = "#")
         self.lblTape7.config(text = "#")
 
+        # fills the GUI tape with the tape depending on the size 
         if len(self.tape) >= 5:
             self.lblTape3.config(text = str(self.tape[0]))
             self.lblTape4.config(text = str(self.tape[1]))
@@ -494,28 +516,36 @@ class TuringMachineGUI():
         elif len(self.tape) >= 1:
             self.lblTape3.config(text = str(self.tape[0]))
 
+    # this method will make the tape more readable when the machine has finished, and removing any excess blank symbols added to either side of the tape
     def finaliseTape(self):
         finaltapestr = ""
-
+        # removes blank symbols on the front of the tape
         while self.TM.tape[0] == "#":
             self.TM.tape.pop(0)
             if self.TM.tape[0] != "#":
                 break
+
+        # removes blank symbols on the end of the tape
         if len(self.TM.tape) > 1:
             while self.TM.tape[-1] == "#":
                 self.TM.tape.pop(-1)
                 if self.TM.tape[-1] != "#":
                     break
 
+        # puts each value in a [] to symblise a square on the tape
         for index in range (len(self.TM.tape)):
             finaltapestr += "[" + str(self.TM.tape[index]) + "] "
         return finaltapestr
 
+    # initialises and starts the machine
     def runMachine(self):
+        # creates a new instance of the Turing machine using the defined state, tape and position
         self.TM = TuringMachine(self.starting_state, self.tape, self.tape_position)
         root.update()
+        # starts to initialise/run the machine
         self.TM.runMachine()
 
+    # resets all machine attributes to its default settings
     def resetMachine(self):
         self.lblTape0.config(text = "#")
         self.lblTape1.config(text = "#")
@@ -527,6 +557,8 @@ class TuringMachineGUI():
         self.lblTape7.config(text = "#")
         self.TM.tape_position = 0
         self.TM.tape = ["#", "#", "#", "#", "#", "#", "#", "#", "#"]
+
+        # positions of the tape, which will change depending on left or right
         self.GUI_tape_positions = [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]  # positions of the tape, which will change depending on left or right
 
         self.lblScannedState.config(text = "N/A")
@@ -536,6 +568,7 @@ class TuringMachineGUI():
         self.lblNewState.config(text = "N/A")
         root.update()
 
+    # produces a popup window displaying the final tape of the machine
     def finalTapePopup(self):
 
         finaltape_str = self.finaliseTape()
@@ -556,7 +589,7 @@ class TuringMachineGUI():
 
         self.resetMachine()
 
-
+# a transition class used to handle if any of the methods cannot be called in the current machine state
 class Transition:
     def foundBlank(self):
         print "Error, [#] or Blank Symbol instruction not found in current state"
@@ -570,38 +603,47 @@ class Transition:
         print "Error, [0] instruction not found in current state"
         return False
 
+# one of the states of the machine which will handle changing the tape and the machines state depending on the method called
 class TuringStateA(State, Transition):
     def __init__(self, context):
         State.__init__(self, context)
 
+    # if the machine finds a 0 on the tape it will
     def found0(self):
+        # display the current state on the GUI
         print "(A) Current State"
         app.lblScannedState.config(text = "A")
         root.update()
         sleep(0.2)
         
+        # display the current symbol read on the tape
         print "(0) Symbol on Tape"
         app.lblScannedSymbol.config(text = "0")
         root.update()
         sleep(0.2)
         
+        # display the direction of the head
         print "(R) Direction"
         app.lblDirection.config(text = "Right")
         root.update()
         sleep(0.2)
         
+        # using current context changes the symbol on the turing machine tape
         self.current_context.tape[self.current_context.tape_position] = "1"
         print "(1) New Symbol on Tape"
         app.lblNewSymbol.config(text = "1")
         root.update()
         sleep(0.2)
         
+        # using current context changes to the next state of the machine
         self.current_context.setState("B")
         print "(B) New State"
         app.lblNewState.config(text = "B")
         root.update()
         
+        # proceeds to move the tape to the right on the list
         self.current_context.moveRight()
+        # and moves the tape right on the GUI
         app.scrollRight(self.current_context.tape)
         root.update()
         print "Tape: ", self.current_context.tape
@@ -840,18 +882,22 @@ class TuringStateHALT(State, Transition):
         State.__init__(self, context)
 
 class TuringMachine(StateContext, Transition):
+    # when the machine is initialised the state, tape and position will be set
     def __init__(self, starting_state, tape, starting_position):
         self.tape = tape
         self.tape_position = starting_position
         self.starting_state = starting_state
+        # a bool to determine if the machine has completed or not
         self.end_of_machine = False
 
+        # in the available states dict the machine creates an instance of each of the TuringStates under keys used to transition between states
         self.availableStates["A"] = TuringStateA(self)
         self.availableStates["B"] = TuringStateB(self)
         self.availableStates["C"] = TuringStateC(self)
         self.availableStates["D"] = TuringStateD(self)
         self.availableStates["HALT"] = TuringStateHALT(self)
 
+        # sets the starting state to the one specified
         self.setState(self.starting_state)
 
     def foundBlank(self):
@@ -863,6 +909,8 @@ class TuringMachine(StateContext, Transition):
     def found1(self):
         return self.current_state.found1()
 
+    # a dictionary used to handle what symbols are read on the tape and run the corrisponding method depending on what was read
+    # e.g. if (1) was read on the tape, the machine will run self.found1 form the dictionary
     def runMachine(self):
         symbols = {
             "#": self.foundBlank,
@@ -872,24 +920,32 @@ class TuringMachine(StateContext, Transition):
         print "\nStarting Tape: ", self.tape
         print "\n - - - - - - - - - - - - - -  \n"
 
+        # for loop which will run through the machine and call the correct methods until the machine reaches a Halting state
         while self.end_of_machine is False:
             if symbols[self.tape[self.tape_position]]() is False:
                 break
+
+            # resets the GUI instructions when new instructions are read
             app.lblScannedState.config(text = "N/A")
             app.lblScannedSymbol.config(text = "N/A")    
             app.lblDirection.config(text = "N/A")
             app.lblNewSymbol.config(text = "N/A")
             app.lblNewState.config(text = "N/A")
                 
-        app.finalTapePopup()        
+        # when finished the machines tape is finalised
+        app.finalTapePopup()       
 
-    def moveRight(self):    # handles moving right on the tape
-        self.tape_position += 1 # moves along once to the right of the tape
-        self.tape.append("#")   # a # will be added to the end to stop any out of range errors by the GUI
+    # handles moving right on the tape
+    def moveRight(self):
+        # moves along once to the right of the tape
+        self.tape_position += 1
+        # a # will be added to the end to stop any out of range errors by the GUI
+        self.tape.append("#") 
 
-    def moveLeft(self): # handles moving left on the tape
-        #self.tape_position -= 1 # moves along once to the left of the tape
-        self.tape = ["#"] + self.tape   # the machine will add a # to the start of the tape to stop any out of rang errors by the GUI
+    # handles moving left on the tape
+    def moveLeft(self):
+        # the machine will add a # to the start of the tape to stop any out of rang errors by the GUI
+        self.tape = ["#"] + self.tape
 
 
 if __name__ == "__main__":

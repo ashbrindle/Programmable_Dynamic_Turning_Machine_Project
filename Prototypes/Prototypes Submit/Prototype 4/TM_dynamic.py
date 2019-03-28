@@ -11,7 +11,12 @@ NEXT_STATE = 2
 
 
 class TuringMachineGUI():
+    '''Handles all of the GUI aspects of the program, such as updating the interface 
+    and resetting the machine'''
+
     def __init__(self, window):
+
+        # defines all of the fonts used in the GUI
         self.tape_font = ("times", 20)
         self.position_font = ("times", 15, "italic")
         self.instruction_font = ("times", 15)
@@ -22,16 +27,23 @@ class TuringMachineGUI():
         self.submitTape_font = ("calibri", 10, "bold")
         self.title_font = ("times", 15)
         self.title2_font = ("times", 11)
+
+        # creates an instance of the turing machine to allow for adding the tape, state, position, etc. To the machine
         self.TM = TuringMachine()
+        
+        # attributes to handle the speed the machine will run (sleep)
         self.speedLabel = 5
         self.speeds = [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]
         self.speedindex = 5
-        self.str_instructions = []
+
+        # the GUI tape positions to handle where each value on the tape will show on the GUI
         self.GUI_tape_positions = [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
+        # draws the GUI aspects on the window
         self.drawWindow()
 
     def drawWindow(self):
 
+        # shows the tape positions at the top of the window
         self.lblPositions = Label(
             root, 
             text= "-3             -2             -1             0              1              2              3              4",
@@ -40,6 +52,7 @@ class TuringMachineGUI():
         self.lblPositions.pack()
         self.lblPositions.place(x = 80, y = 5)
 
+        # the following represents each square of the tape
         self.lblTape0 = Label(
             root, 
             text= "#",
@@ -144,6 +157,7 @@ class TuringMachineGUI():
         self.lblTape7.pack()
         self.lblTape7.place(x = 622, y = 30)
 
+        # allows for moving right
         self.btnRight = Button(
             root,
             text = ">",
@@ -159,6 +173,7 @@ class TuringMachineGUI():
         self.btnRight.pack()
         self.btnRight.place(x = 700, y = 30)
 
+        # allows for moving left
         self.btnLeft = Button(
             root,
             text = "<",
@@ -174,6 +189,7 @@ class TuringMachineGUI():
         self.btnLeft.pack()
         self.btnLeft.place(x = 30, y = 30)
 
+        # title for the add instruction section
         self.lblInstructionsTitle = Label(
             root,
             text = "Add Instruction:",
@@ -181,6 +197,7 @@ class TuringMachineGUI():
         self.lblInstructionsTitle.pack()
         self.lblInstructionsTitle.place(x = 468, y = 115)
 
+        # border for adding instructions
         self.lblAddInstructionsBorder = Label(
             root, 
             text= "Scanned State: \n"
@@ -200,6 +217,7 @@ class TuringMachineGUI():
         self.lblAddInstructionsBorder.pack()
         self.lblAddInstructionsBorder.place(x = 468, y = 140)
 
+        # the following allow the user to add instructions
         self.txtScannedState = Entry(
             root,
             bg = "white",
@@ -255,6 +273,7 @@ class TuringMachineGUI():
         self.txtNewState.pack()
         self.txtNewState.place(x = 675, y = 230)
 
+        # saves the instructions to the machine
         self.btnSaveInstruction = Button(
             root,
             text = "Save Instruction",
@@ -269,6 +288,7 @@ class TuringMachineGUI():
         self.btnSaveInstruction.pack()
         self.btnSaveInstruction.place(x = 468, y = 265)
 
+        # title for the running instructions
         self.lblInstructionsTitle = Label(
             root,
             text = "Running Instruction:",
@@ -276,6 +296,7 @@ class TuringMachineGUI():
         self.lblInstructionsTitle.pack()
         self.lblInstructionsTitle.place(x = 468, y = 293)
 
+        # border for the running instructions
         self.lblInstructionsBorder = Label(
             root, 
             text= "Scanned State: \n"
@@ -295,6 +316,7 @@ class TuringMachineGUI():
         self.lblInstructionsBorder.pack()
         self.lblInstructionsBorder.place(x = 468, y = 318)
 
+        # the following shows the currently running instructions
         self.lblScannedState = Label(
             root,
             text = "N/A",
@@ -345,6 +367,7 @@ class TuringMachineGUI():
         self.lblNewState.pack()
         self.lblNewState.place(x = 665, y = 408)
 
+        # title for showing the listbox of instructions
         self.lblAllInstructionsTitle = Label(
             root,
             text = "All Instructions:",
@@ -352,13 +375,14 @@ class TuringMachineGUI():
         self.lblAllInstructionsTitle.pack()
         self.lblAllInstructionsTitle.place(x = 262, y = 115)
 
+        # the following handles the list box for isntructions
         self.instructionsFrame = Frame(
             root,
             borderwidth = 2,
             relief = "solid")
         self.instructionsFrame.pack()
         self.instructionsFrame.place(x = 262, y = 140)
-
+        # with a scroll bar
         self.scrlInstructions = Scrollbar(self.instructionsFrame)
         self.scrlInstructions.pack(side = "right", fill = "y")
 
@@ -372,6 +396,7 @@ class TuringMachineGUI():
         self.lstShowInstructions.pack(side = "left", fill = "y")
         self.scrlInstructions.config(command = self.lstShowInstructions.yview)
 
+        # the following handles adding a tape to the machine
         self.lblInsertTapeTitle = Label(
             root,
             text = "Insert Tape (CSV):",
@@ -405,6 +430,7 @@ class TuringMachineGUI():
         self.btnTape.pack()
         self.btnTape.place(x = 19, y = 165)
 
+        # the following handles adding a starting state to the machine
         self.lblStartingTitle = Label(
             root,
             text = "Insert Starting State:",
@@ -438,6 +464,7 @@ class TuringMachineGUI():
         self.btnStartState.pack()
         self.btnStartState.place(x = 19, y = 240)
 
+        # runs the machine
         self.btnRun = Button(
             root,
             text = "Run Machine",
@@ -452,6 +479,7 @@ class TuringMachineGUI():
         self.btnRun.pack()
         self.btnRun.place(x = 19, y = 275)
 
+        # handles changing the speed of the machine
         self.lblCurrentSpeed = Label(
             root,
             text = "Speed: 5", 
@@ -487,6 +515,7 @@ class TuringMachineGUI():
         self.btnDecreaseSpeed.pack()
         self.btnDecreaseSpeed.place(x = 200, y = 305)
 
+        # shows help for the machine
         self.btnHelp = Button(
             root,
             text = "Help",
@@ -501,6 +530,7 @@ class TuringMachineGUI():
         self.btnHelp.pack()
         self.btnHelp.place(x = 19, y = 333)
 
+        # handles displaying the starting state and position of the machine
         self.lblStartingState = Label(
             root,
             text = "Starting State: N/A",
@@ -515,6 +545,7 @@ class TuringMachineGUI():
         self.lblTapePosition.pack()
         self.lblTapePosition.place(x = 262, y = 415)
 
+        # handles changing the tape position
         self.lblTapePositionTitle = Label(
             root,
             text = "Tape Position (0 >):",
@@ -547,6 +578,7 @@ class TuringMachineGUI():
         self.btnTapePosition.pack()
         self.btnTapePosition.place(x = 19, y = 411)
 
+        # loads data from file
         self.btnLoadDataFromFile = Button(
             root,
             text = "Reset and Load Data From File",
@@ -561,6 +593,7 @@ class TuringMachineGUI():
         self.btnLoadDataFromFile.pack()
         self.btnLoadDataFromFile.place(x = 19, y = 446)
 
+        # deletes all instructions in the machine
         self.btnDeleteAllInstructions = Button(
             root,
             text = "Clear All Instructions",
@@ -589,9 +622,11 @@ class TuringMachineGUI():
         self.btnExit.pack()
         self.btnExit.place(x = 468, y = 446)
 
+    # used to scroll left on the GUI tape
     def scrollLeft(self):
         if len(self.TM.tape) > 0:
 
+            # moves the GUI tape positions to the left, checks for original tape as this will determine if the machine is scrolling while running or before
             if str(self.TM.tape) == str(self.TM.original_tape):
                 for index in range(len(self.GUI_tape_positions)):
                     self.GUI_tape_positions[index] -= 1
@@ -600,6 +635,7 @@ class TuringMachineGUI():
                 for index in range(len(self.GUI_tape_positions)):
                     self.GUI_tape_positions[index] += 1
 
+            # this will handle what values are presented on the GUI tape
             if self.GUI_tape_positions[3] > -1:
                 if self.GUI_tape_positions[0] > -1:
                     self.lblTape0.config(text = str(self.TM.tape[self.GUI_tape_positions[0]]))
@@ -637,9 +673,11 @@ class TuringMachineGUI():
     def scrollRight(self):
         if len(self.TM.tape) > 0:
 
+            # moves the GUI tape positions to the right
             for index in range(len(self.GUI_tape_positions)):
                 self.GUI_tape_positions[index] += 1
 
+            # this will handle what values are presented on the GUI tape
             if self.GUI_tape_positions[0] < len(self.TM.tape) and self.GUI_tape_positions[0] >= 0:
                 self.lblTape0.config(text = str(self.TM.tape[self.GUI_tape_positions[0]]))
             else:
@@ -673,16 +711,20 @@ class TuringMachineGUI():
             else:
                 self.lblTape7.config(text = "#")
 
+            # this moves the tape back if the tape is too short for the GUI
             if self.GUI_tape_positions[3] > len(self.TM.tape):
                 for index in range(len(self.GUI_tape_positions)):
                     self.GUI_tape_positions[index] -= 1
     
+    # method to handle increasing the speed of the machine
     def increaseSpeed(self):
-
+        # handles if the speed goes too high
         if self.speedindex < 10:
+            # changes index to be used in speeds list
             self.speedindex += 1
             self.speedLabel -= 1
             self.lblCurrentSpeed.config(text = "Speed: " + str(self.speedLabel))
+            # sets the speed using the speeds list defined when initialised, this list holds all the different values the sleep can use in the TuringState
             self.TM.time = self.speeds[self.speedindex]
         else:
             print "Too Slow"
@@ -690,10 +732,13 @@ class TuringMachineGUI():
         print "Interval: ", self.TM.time
 
     def decreaseSpeed(self):
+        # handles if the speed goes too low
         if self.speedindex > 0:
+            # changes index to be used in speeds list
             self.speedindex -= 1
             self.speedLabel += 1
             self.lblCurrentSpeed.config(text = "Speed: " + str(self.speedLabel))
+            # sets the speed form the speeds list
             self.TM.time = self.speeds[self.speedindex]
         else:
             print "Too Fast"
@@ -701,6 +746,7 @@ class TuringMachineGUI():
         print "Interval: ", self.TM.time
 
     def setInstruction(self):
+        # gets all of the instructions from the textboxes
         state = self.txtScannedState.get()
         self.txtScannedState.delete(0,END)
         symbol = self.txtScannedSymbol.get()
@@ -713,27 +759,36 @@ class TuringMachineGUI():
         self.txtNewState.delete(0,END)
         root.update()
 
+        # and adds them to the temp_instructions using setInstructions
         self.TM.setInstruction(state, symbol, direction, new_symbol, new_state)
 
     def submitTape(self):
+        # gets the tape from the textbox and if the textbox is empty the tape is filled with blank symbols
         if self.txtTape.get("1.0", END) == "\n":
             self.txtTape.insert(END, "#")
 
+        # fills the tape until it reaches a length of 8 (16 is used due to the commas in the string)
         while len(str(self.txtTape.get("1.0", END))) < 16:
             self.txtTape.insert(END, ",#")
 
+        # gets the tape
         input_tape = str(self.txtTape.get("1.0", END))
+        # removes the new line
         input_tape = input_tape[:-1]
+        # using CSV, seperate the values on the tape
         self.TM.tape = input_tape.split(",")
+        # sets the original tape used for navigation when the machine is not running
         self.TM.original_tape = self.TM.tape
-
+        ## fills the tape with the new tape values
         self.fillTape()
-
+        # emptys the testbox
         self.txtTape.delete('1.0', END)
         print "Current Tape: ", self.TM.tape  
+        # resets the tape position
         self.TM.tape_position = 0 
 
     def fillTape(self):
+        # initially resets the GUI tape
         self.GUI_tape_positions = [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
         self.lblTape0.config(text = "#")
         self.lblTape1.config(text = "#")
@@ -744,6 +799,7 @@ class TuringMachineGUI():
         self.lblTape6.config(text = "#")
         self.lblTape7.config(text = "#")
 
+        # sets the values on the tape depending on the the length
         if len(self.TM.tape) >= 5:
             self.lblTape3.config(text = str(self.TM.tape[0]))
             self.lblTape4.config(text = str(self.TM.tape[1]))
@@ -766,54 +822,73 @@ class TuringMachineGUI():
             self.lblTape3.config(text = str(self.TM.tape[0]))
 
     def setStartingState(self):
+        # if the textbox has a value
         if str(self.txtStartState.get("1.0", END)) != "":
+            # it will get the value
             self.TM.starting_state = str(self.txtStartState.get("1.0", END))
+            # and set that as the next starting state
             self.TM.starting_state = self.TM.starting_state[:-1]
             print "starting State set to: ", self.TM.starting_state
             self.lblStartingState.config(text = "Starting State: " + self.TM.starting_state)
+            # emptys the textbox
             self.txtStartState.delete(1.0, END)
 
     def setTapePosition(self):
+        # if the textbox has a value
         if str(self.txtTapePosition.get()) != "":
+            # and if the int value in is more than 0 (avoids setting position in the minus')
             if int(str(self.txtTapePosition.get())) >= 0:    
+                # sets the new tape position
                 self.TM.tape_position = int(self.txtTapePosition.get())
                 print "Tape Position set to: ", str(self.TM.tape_position)
                 self.lblTapePosition.config(text = "Tape Position: " + str(self.TM.tape_position))
+                # deletes the textbox contents
                 self.txtTapePosition.delete(0, END)
+                # and resets the tape positions before moving the tape to the right
                 self.GUI_tape_positions = [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
+                # moves the tape to the right on the tape position number
                 for x in range(self.TM.tape_position):
                     app.scrollRight()
 
     def finaliseTape(self):
         finaltapestr = ""
 
+        # removes the blank symbols on the front of the tape
         while self.TM.tape[0] == "#":
             self.TM.tape.pop(0)
             if self.TM.tape[0] != "#":
                 break
+        # removes the blank symbols on the end of the tape
         if len(self.TM.tape) > 1:
             while self.TM.tape[-1] == "#":
                 self.TM.tape.pop(-1)
                 if self.TM.tape[-1] != "#":
                     break
 
+        # finialises the tape and makes it readable for the user
         for index in range (len(self.TM.tape)):
             finaltapestr += "[" + str(self.TM.tape[index]) + "] "
         return finaltapestr
 
     def runMachine(self):
+        # resets the GUI tape positions beack to its initial state
         self.GUI_tape_positions = [-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7]
+        # re-fills the tape
         self.fillTape()
         root.update()
+        # starts the machine using the Turing machine instance
         self.TM.startMachine()
 
+    # displays a popup window showing the final tape of the machine
     def finalTapePopup(self):
 
+        # calls finaliseTape to get the string to print to the popup window
         finaltape_str = self.finaliseTape()
 
         popup_finaltape = Toplevel()
         popup_finaltape.title("Final Tape")
         popup_finaltape.geometry("300x150+750+250")
+        # sets the final tape on the pop up
         lblInstructionFound = Label(popup_finaltape, text = "Final Tape: " + finaltape_str)
         lblInstructionFound.pack()
 
@@ -825,10 +900,11 @@ class TuringMachineGUI():
 
         btnDismiss.focus()
 
+        # when the popup runs, the machine will reset allowing for another instance of the Turing Machine to run
         self.resetMachine()
 
     def helpPopup(self):
-
+        # string for the help window, explaining how to use the machine
         help_string = """A turing machine works by a set of instructions and acting accordingly depending on what state the machine is and what is present on the tape
         An example instruction would be, if in state A and symbol is 0, change symbol to 1 and move to state B, then move right.
         
@@ -881,11 +957,14 @@ class TuringMachineGUI():
         btnDismiss.focus()
 
     def clearInstructions(self):
+        # resets the instructions on the machine
         self.TM.temp_instructions = {}
+        # this avoids key errors, and creates the key if it does not exist
         self.TM.temp_instructions = defaultdict(dict)
         self.lstShowInstructions.delete(0, END)
 
     def resetMachine(self):
+        # resets everything in the machine to its default attributes
         self.lblTape0.config(text = "#")
         self.lblTape1.config(text = "#")
         self.lblTape2.config(text = "#")
@@ -919,23 +998,28 @@ class TuringMachineGUI():
 
     def loadFromFile(self):
         instruction = []
+        # resets the machine before loading from a file
         self.resetMachine()
         try:
+            # sets the file to the instructions.txt for reading
             file = open("instructions.txt", "r")
-        except IOError:
+        except IOError: # IOError handles if the file does not exist
             print "Instructions file does not exist"
             return
         for line in file:
+            # for each line in the file, it is stripped and split using commas, and appaended to the instructions 2D list
             instruction = map(str, line.strip().split(','))
             self.TM.setInstruction(instruction[0], instruction[1], instruction[2], instruction[3], instruction[4])
         file.close
 
         try:
+            # sets teh file to tape.txt for reading
             file = open("tape.txt", "r")
-        except IOError:
+        except IOError: # IOError for if the file does not exist
             print "Tape file does not exist"
             return
         for line in file:
+            # reads the tape from the file, using CSV
             self.TM.tape = map(str, line.strip().split(','))
         self.fillTape()
 
@@ -950,8 +1034,19 @@ class Transition:
 
 
 class TuringState(State, Transition):
+    ''' this will serve as the main state in the state machine and will be used to
+    dynamically create the states needed in the machine this is done through looking
+    through the instructions provided and adding the states which have been speicifed
+    as a TuringState() object. This means that there will be multiple of this state in
+    the state machine, each representing the different states in the State and Turing Machine'''
+
+    # depending on the state the machine is in, a dictionary will be used to contain all
+        # instructions which can be executed in the current state. This will be different with each state in the machine
 
     instructions = {}
+
+    # when the state is created the instructions which are relevent to the state will be passed in through a
+        # parameter and then saved in the current states instructions dictionary
 
     def __init__(self, context, new_instructions):
         State.__init__(self, context)
@@ -959,23 +1054,37 @@ class TuringState(State, Transition):
 
     def executeInstruction(self):
         print "(" + str(self.instructions) + ") Instructions Asociated with State: (" + self.current_context.state
+
+        # the machine gets the current symbol on the tape and saves it to a variable to be used
+
         current_symbol = self.current_context.tape[self.current_context.tape_position]
 
+        # if the symbol on the tape exists in the instructions, the instructions relevent to
+            # the symbol will be carried out
+
         if current_symbol in self.instructions:
+
+            # prints out the current state of the machine and has a sleep for readability
 
             print "(" + self.current_context.state + ") Current State"
             app.lblScannedState.config(text = self.current_context.state)
             sleep(self.current_context.time)
             root.update()
 
+            # prints the current symbol read from the tape
+
             app.lblScannedSymbol.config(text = current_symbol)
             sleep(self.current_context.time)
             root.update()
+
+            # prints the direction the machine will take next
 
             print "(" + self.instructions[current_symbol][DIRECTION] + ") Direction"
             app.lblDirection.config(text = self.instructions[current_symbol][DIRECTION])
             sleep(self.current_context.time)
             root.update()
+
+            # the machine will then change the current symbol on the tape to the new symbol provided in the instructions
 
             self.current_context.tape[self.current_context.tape_position] = self.instructions[current_symbol][NEW_SYMBOL]
             print "(" + self.instructions[current_symbol][NEW_SYMBOL] + ") New Symbol"
@@ -983,11 +1092,16 @@ class TuringState(State, Transition):
             sleep(self.current_context.time)
             root.update()
 
+            # then the machine will transition to the new state in the machine
+
             self.current_context.setState(self.instructions[current_symbol][NEXT_STATE])
             print "(" + self.instructions[current_symbol][NEXT_STATE] + ") New State"
             app.lblNewState.config(text = self.instructions[current_symbol][NEXT_STATE])
             sleep(self.current_context.time)
             root.update()
+
+            # the machine will move either left or right depending on the instructions,
+                # if an invalid direction is provided, the heads position on the tape will not move
 
             if self.instructions[current_symbol][DIRECTION] == "R":
                 if self.current_context.tape_position >= (len(self.current_context.tape) - 2):
@@ -1007,26 +1121,53 @@ class TuringState(State, Transition):
 
 
 class TuringMachine(StateContext, Transition):
+    ''' the main TuringMachine class will be the main way to access the state machine
+    and set all of the correct attributes for defining the condition of the Turing Machine.
+    This class will also include methods for adding an instruction to the temp_instructions
+    dictionary which will handle all of the states in the machine and their associated instructions,
+    as well as handle adding all of the states to the machine'''
 
     def __init__(self):
 
-        self.temp_instructions = {}
+        # default attributes for the Turing Machine
+
         self.tape = []
         self.original_tape = []
         self.starting_state = None
         self.tape_position = 0
         self.time = 0.2
+        
+        # this will hold all of the instructions before they are initalised in the machine,
+            # this is a nested dictionary containing 2 sets of keys,
+            # the state keys and the symbol keys
+        
+        self.temp_instructions = {}
+
+        # this is used through the collections library, giving the ability to create a key
+            # in the nested dictionary if none is present
+
         self.temp_instructions = defaultdict(dict)
 
     # calls the correct method with the current state of the machine
     def executeInstruction(self):
         return self.current_state.executeInstruction()
 
+    # this method is used to save an instruction to the machines temporary dictionary.
+        # This will be called whenever a single instruction is submitted and adds the
+        # instruction or creates a new key if needed in the nested dictionary
+
     def setInstruction(self, state, symbol, direction, new_symbol, new_state):
+        
+        # saves the instruction to the nested dictionary using the state and the symbol provided,
+            # while saving a list of the actions the machine will take
+
         self.temp_instructions[state][symbol] = [direction, new_symbol, new_state]
         sinstruction = "[" + state + ", " + symbol + "]:    " + str(self.temp_instructions[state][symbol])
         app.lstShowInstructions.insert(END, sinstruction)
 
+    # this method will initalise the machine when all of the instructions are present.
+        # The machine will create the states dynamically depending on what instructions are saved
+        
     def startMachine(self):
 
         for x in range(self.tape_position):
