@@ -9,7 +9,7 @@ class MainMenu():
         self.submit_font = ("calibri", 10, "bold") 
 
         # default selection for the drop down menu
-        self.machine_selection = "Hello World Turing Machine"
+        self.machine_selection = "Unary Multiplication Turing Machine"
 
         # drop down options dict for the state diagram images
         self.machine_state_diagrams = {
